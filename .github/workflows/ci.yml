@@ -1,0 +1,146 @@
+name: ci
+
+# Four gate jobs run on every pull request against main and on every push to main.
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+# Superseded pull-request runs are cancelled.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+permissions:
+  contents: read
+
+jobs:
+  # Regenerates the OpenAPI spec from code (Scramble), fails when the committed
+  # docs/openapi.json is out of date and lints it (Spectral).
+  openapi:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: mbstring, pdo_sqlite, sqlite3
+          coverage: none
+
+      - name: Install PHP dependencies
+        run: composer install --no-interaction --prefer-dist --no-progress
+
+      - name: Prepare app environment
+        run: |
+          cp .env.example .env
+          php artisan key:generate
+
+      # Scramble reads the DB schema for type inference, so the script generates
+      # against a freshly migrated sqlite database (identical to local generation).
+      - name: Regenerate OpenAPI spec
+        run: bash scripts/openapi-export.sh
+
+      - name: Fail if committed spec is out of date
+        run: |
+          git diff --exit-code docs/openapi.json \
+            || (echo "::error::docs/openapi.json is out of date. Run 'npm run openapi:export' locally and commit it." && exit 1)
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - name: Install Node dependencies
+        run: npm ci
+
+      - name: Validate OpenAPI spec
+        run: npm run openapi:lint
+
+  # Larastan (PHPStan) static analysis.
+  phpstan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: mbstring, pdo_sqlite, sqlite3
+          coverage: none
+
+      - name: Install PHP dependencies
+        run: composer install --no-interaction --prefer-dist --no-progress
+
+      - name: Prepare app environment
+        run: |
+          cp .env.example .env
+          php artisan key:generate
+
+      - name: Run PHPStan
+        run: composer analyse
+
+  # PHPUnit test suite against sqlite :memory:.
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: mbstring, pdo_sqlite, sqlite3
+          coverage: none
+
+      - name: Install PHP dependencies
+        run: composer install --no-interaction --prefer-dist --no-progress
+
+      - name: Prepare app environment
+        run: |
+          cp .env.example .env
+          php artisan key:generate
+
+      - name: Run test suite
+        run: php artisan test --compact
+
+  # ESLint, Prettier and vue-tsc type-check. Mirrors the frontend gates of `composer ci:check`.
+  frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - name: Install Node dependencies
+        run: npm ci
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: mbstring, pdo_sqlite, sqlite3
+          coverage: none
+
+      - name: Install PHP dependencies
+        run: composer install --no-interaction --prefer-dist --no-progress
+
+      - name: Prepare app environment
+        run: |
+          cp .env.example .env
+          php artisan key:generate
+
+      - name: Generate Wayfinder types
+        run: php artisan wayfinder:generate --with-form
+
+      - name: TypeScript check
+        run: npm run types:check
+
+      - name: ESLint
+        run: npm run lint:check
+
+      - name: Prettier
+        run: npm run format:check

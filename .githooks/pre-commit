@@ -1,0 +1,42 @@
+#!/bin/sh
+#
+# Regenerates the IDE-helper files + the OpenAPI export and stages the committed ones
+# (_ide_helper_models.php, docs/openapi.json).
+#
+# The project's composer dependencies require PHP >= 8.4.1; a system `php` that
+# is older (e.g. 8.3) makes composer's platform_check.php fatal. So resolve a
+# suitable PHP first and put it at the front of PATH — this also makes the
+# downstream openapi-export.sh (which calls `php`) use the right binary.
+#
+# Non-blocking by design: generation failures never abort the commit (exit 0).
+
+# 1. Pick a PHP >= 8.4 via the shared resolver (also used by the Claude Code
+#    format hook) so the resolution logic lives in exactly one place.
+PHP_BIN="$(sh "$(git rev-parse --show-toplevel)/scripts/resolve-php84.sh" 2>/dev/null)"
+if [ -z "$PHP_BIN" ]; then
+    echo "pre-commit: no PHP >= 8.4 found — skipping IDE-helper/OpenAPI generation." >&2
+    exit 0
+fi
+
+PATH="$(dirname "$PHP_BIN"):$PATH"
+export PATH
+
+# 2. Generate IDE helper files against a throwaway sqlite DB — the local
+#    MariaDB port may be down or taken by another process, which makes the
+#    ide-helper commands hang indefinitely.
+bash scripts/with-temp-sqlite.sh sh -c '
+    php artisan ide-helper:generate &&
+    php artisan ide-helper:meta &&
+    php artisan ide-helper:models -M
+'
+
+# 3. Export OpenAPI documentation.
+npm run openapi:export
+
+# 4. Stage the generated files (only if they exist).
+for f in _ide_helper_models.php docs/openapi.json; do
+    [ -f "$f" ] && git add "$f"
+done
+
+# Exit 0: never block a commit on generation issues.
+exit 0

@@ -1,0 +1,27 @@
+{
+    "preset": "laravel",
+    "rules": {
+        "braces_position": false,
+        "class_definition": false,
+        "concat_space": false,
+        "control_structure_continuation_position": false,
+        "cast_spaces": false,
+        "not_operator_with_successor_space": false,
+        "single_line_empty_body": false,
+        "phpdoc_separation": {
+            "groups": [
+                ["deprecated", "link", "see", "since"],
+                ["author", "copyright", "license"],
+                ["category", "package", "subpackage"],
+                ["property", "property-read", "property-write", "mixin"],
+                ["param", "return"]
+            ]
+        },
+        "binary_operator_spaces": {
+            "operators": {
+                "=>": "single_space",
+                "=": "single_space"
+            }
+        }
+    }
+}

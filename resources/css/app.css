@@ -1,0 +1,230 @@
+@import 'tailwindcss';
+
+@import 'tw-animate-css';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+    --font-sans: Outfit, sans-serif;
+    --font-sans--font-feature-settings: normal;
+    --font-sans--font-variation-settings: normal;
+
+    --radius-lg: var(--radius);
+    --radius-md: calc(var(--radius) - 2px);
+    --radius-sm: calc(var(--radius) - 4px);
+    --radius-xl: calc(var(--radius) + 4px);
+    --radius-2xl: calc(var(--radius) + 6px);
+
+    /* TailAdmin shadow-theme scale (subtle; cards also carry a 1px border). */
+    --shadow-card:
+        0 1px 3px 0 rgba(16, 24, 40, 0.06), 0 1px 2px 0 rgba(16, 24, 40, 0.04);
+    --shadow-card-lg:
+        0 12px 16px -4px rgba(16, 24, 40, 0.08),
+        0 4px 6px -2px rgba(16, 24, 40, 0.04);
+
+    --color-background: var(--background);
+    --color-foreground: var(--foreground);
+
+    --color-card: var(--card);
+    --color-card-foreground: var(--card-foreground);
+
+    --color-popover: var(--popover);
+    --color-popover-foreground: var(--popover-foreground);
+
+    --color-primary: var(--primary);
+    --color-primary-foreground: var(--primary-foreground);
+
+    --color-secondary: var(--secondary);
+    --color-secondary-foreground: var(--secondary-foreground);
+
+    --color-muted: var(--muted);
+    --color-muted-foreground: var(--muted-foreground);
+
+    --color-accent: var(--accent);
+    --color-accent-foreground: var(--accent-foreground);
+
+    --color-destructive: var(--destructive);
+    --color-destructive-foreground: var(--destructive-foreground);
+
+    --color-border: var(--border);
+    --color-input: var(--input);
+    --color-ring: var(--ring);
+
+    --color-chart-1: var(--chart-1);
+    --color-chart-2: var(--chart-2);
+    --color-chart-3: var(--chart-3);
+    --color-chart-4: var(--chart-4);
+    --color-chart-5: var(--chart-5);
+
+    --color-sidebar: var(--sidebar-background);
+    --color-sidebar-foreground: var(--sidebar-foreground);
+    --color-sidebar-primary: var(--sidebar-primary);
+    --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+    --color-sidebar-accent: var(--sidebar-accent);
+    --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+    --color-sidebar-border: var(--sidebar-border);
+    --color-sidebar-ring: var(--sidebar-ring);
+}
+
+/*
+  The default border color has changed to `currentColor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+    *,
+    ::after,
+    ::before,
+    ::backdrop,
+    ::file-selector-button {
+        border-color: var(--color-gray-200, currentColor);
+    }
+
+    button,
+    [type='button'],
+    [type='reset'],
+    [type='submit'] {
+        @apply cursor-pointer;
+    }
+}
+
+@layer utilities {
+    body,
+    html {
+        --font-sans:
+            'Outfit', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji',
+            'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+    }
+
+    /*
+     * Always-visible (non-overlay) scrollbar for scroll containers — used by the
+     * dashboard timeline cards. Styling ::-webkit-scrollbar makes Chrome/Safari
+     * render a persistent (non-overlay) scrollbar that stays visible whenever the
+     * element overflows, instead of the macOS overlay bar that fades when idle.
+     *
+     * We deliberately do NOT set the standard `scrollbar-width`/`scrollbar-color`
+     * here: in Chrome 121+ those take precedence and DISABLE the ::-webkit-scrollbar
+     * styling, which would bring the fading overlay bar back. Firefox only supports
+     * the standard properties (and can't force an always-visible overlay scrollbar
+     * via CSS anyway), so it keeps its native scrollbar.
+     */
+    .scrollbar-stable::-webkit-scrollbar {
+        width: 10px;
+    }
+
+    .scrollbar-stable::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    .scrollbar-stable::-webkit-scrollbar-thumb {
+        background-color: color-mix(
+            in srgb,
+            var(--muted-foreground) 50%,
+            transparent
+        );
+        border-radius: 9999px;
+        /* Inset the thumb from the track edges so it reads as a rounded pill. */
+        border: 2px solid transparent;
+        background-clip: padding-box;
+    }
+
+    .scrollbar-stable::-webkit-scrollbar-thumb:hover {
+        background-color: color-mix(
+            in srgb,
+            var(--muted-foreground) 70%,
+            transparent
+        );
+        background-clip: padding-box;
+    }
+}
+
+:root {
+    /* TailAdmin: gray-50 canvas, white bordered cards, brand #465fff, Outfit. */
+    --background: #f9fafb;
+    --foreground: #1d2939;
+    --card: #ffffff;
+    --card-foreground: #1d2939;
+    --popover: #ffffff;
+    --popover-foreground: #1d2939;
+    --primary: #465fff;
+    --primary-foreground: #ffffff;
+    --secondary: #f2f4f7;
+    --secondary-foreground: #344054;
+    --muted: #f2f4f7;
+    --muted-foreground: #667085;
+    --accent: #ecf3ff;
+    --accent-foreground: #465fff;
+    --destructive: #f04438;
+    --destructive-foreground: #ffffff;
+    --border: #e4e7ec;
+    --input: #d0d5dd;
+    --ring: #465fff;
+    --chart-1: #465fff;
+    --chart-2: #12b76a;
+    --chart-3: #f79009;
+    --chart-4: #0ba5ec;
+    --chart-5: #7592ff;
+    --radius: 0.625rem;
+    --sidebar-background: #ffffff;
+    --sidebar-foreground: #344054;
+    --sidebar-primary: #465fff;
+    --sidebar-primary-foreground: #ffffff;
+    --sidebar-accent: #ecf3ff;
+    --sidebar-accent-foreground: #465fff;
+    --sidebar-border: #e4e7ec;
+    --sidebar-ring: #465fff;
+    --sidebar: #ffffff;
+}
+
+.dark {
+    /* TailAdmin dark: gray-900 canvas, gray-800 surfaces, brand stays. */
+    --background: #101828;
+    --foreground: #f2f4f7;
+    --card: #1a2231;
+    --card-foreground: #f2f4f7;
+    --popover: #1a2231;
+    --popover-foreground: #f2f4f7;
+    --primary: #465fff;
+    --primary-foreground: #ffffff;
+    --secondary: #1d2939;
+    --secondary-foreground: #f2f4f7;
+    --muted: #1d2939;
+    --muted-foreground: #98a2b3;
+    --accent: #1c2547;
+    --accent-foreground: #7592ff;
+    --destructive: #f04438;
+    --destructive-foreground: #ffffff;
+    --border: #2a3441;
+    --input: #344054;
+    --ring: #465fff;
+    --chart-1: #7592ff;
+    --chart-2: #12b76a;
+    --chart-3: #f79009;
+    --chart-4: #0ba5ec;
+    --chart-5: #9cb9ff;
+    --sidebar-background: #1a2231;
+    --sidebar-foreground: #98a2b3;
+    --sidebar-primary: #465fff;
+    --sidebar-primary-foreground: #ffffff;
+    --sidebar-accent: #1c2547;
+    --sidebar-accent-foreground: #7592ff;
+    --sidebar-border: #2a3441;
+    --sidebar-ring: #465fff;
+    --sidebar: #1a2231;
+}
+
+@layer base {
+    * {
+        @apply border-border outline-ring/50;
+    }
+
+    body {
+        @apply bg-background text-foreground;
+    }
+}

@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "permissions": {
+    "deny": [
+      "Bash(php artisan migrate:fresh)",
+      "Bash(php artisan migrate:fresh:*)",
+      "Bash(php artisan migrate:reset)",
+      "Bash(php artisan migrate:reset:*)",
+      "Bash(php artisan migrate:refresh)",
+      "Bash(php artisan migrate:refresh:*)",
+      "Bash(php artisan db:wipe)",
+      "Bash(php artisan db:wipe:*)",
+      "Bash(*artisan migrate:fresh*)",
+      "Bash(*artisan migrate:reset*)",
+      "Bash(*artisan migrate:refresh*)",
+      "Bash(*artisan db:wipe*)"
+    ],
+    "allow": [
+      "Bash(vendor/bin/pint*)",
+      "Bash(composer analyse*)",
+      "Bash(composer analyse:baseline*)",
+      "Bash(composer test*)",
+      "Bash(composer ci:check*)",
+      "Bash(composer lint*)",
+      "Bash(php artisan test*)",
+      "Bash(npm run lint*)",
+      "Bash(npm run format*)",
+      "Bash(npm run types:check*)",
+      "Bash(npm run openapi:*)"
+    ]
+  },
+  "enabledMcpjsonServers": ["laravel-boost"],
+  "enableAllProjectMcpServers": true,
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/scripts/guard-destructive-db.sh"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/scripts/claude-format-hook.sh"
+          }
+        ]
+      }
+    ]
+  }
+}

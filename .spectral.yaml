@@ -1,0 +1,18 @@
+# Spectral-Ruleset für die generierte OpenAPI-Spec (docs/openapi.json).
+# Basiert auf dem offiziellen OpenAPI-Regelsatz; rein generator-typische
+# Stilwarnungen (fehlende operationId/Tags/Kontaktdaten) sind abgeschaltet,
+# strukturelle Fehler (oas3-schema etc.) bleiben als harte Fehler bestehen.
+extends:
+  - "spectral:oas"
+
+rules:
+  operation-operationId: off
+  operation-operationId-unique: off
+  operation-tag-defined: off
+  operation-tags: off
+  # GET-Endpunkte tragen Summary, Parameter und Response-Schema; eine zusätzliche
+  # Freitext-Description pro Operation ist hier nicht erforderlich.
+  operation-description: off
+  info-contact: off
+  info-license: off
+  oas3-api-servers: off
