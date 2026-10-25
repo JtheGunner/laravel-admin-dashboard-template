@@ -39,7 +39,7 @@ const columns: ColumnConfig[] = [
         label: 'Price',
         sortable: true,
         align: 'right',
-        unit: 'CHF',
+        unit: 'USD',
     },
     { key: 'stock', label: 'Stock', sortable: true, align: 'right' },
     {
@@ -60,7 +60,7 @@ const fields = computed<FieldConfig[]>(() => [
         type: 'select',
         options: props.categoryOptions,
     },
-    { name: 'price', label: 'Price (CHF)', type: 'number', required: true },
+    { name: 'price', label: 'Price (USD)', type: 'number', required: true },
     { name: 'stock', label: 'Stock', type: 'number', required: true },
     {
         name: 'status',

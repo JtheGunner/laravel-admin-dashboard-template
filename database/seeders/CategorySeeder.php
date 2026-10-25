@@ -13,20 +13,27 @@ class CategorySeeder extends Seeder {
      */
     public function run(): void {
         $tree = [
-            'Electronics' => ['Laptop', 'Phones', 'Audio'],
-            'Clothing' => ['Shirt', 'Footwear'],
-            'Home' => ['Furniture', 'Kitchen'],
-            'Books' => [],
+            'Electronics' => ['icon' => 'Laptop', 'color' => 'blue', 'children' => ['Laptops', 'Phones', 'Audio']],
+            'Clothing' => ['icon' => 'Shirt', 'color' => 'purple', 'children' => ['Shirts', 'Footwear']],
+            'Home' => ['icon' => 'Home', 'color' => 'green', 'children' => ['Furniture', 'Kitchen']],
+            'Books' => ['icon' => 'Book', 'color' => 'amber', 'children' => []],
         ];
 
         $position = 1;
-        foreach ($tree as $name => $children) {
-            $parent = Category::factory()->create(['name' => $name, 'position' => $position++]);
+        foreach ($tree as $name => $definition) {
+            $parent = Category::factory()->create([
+                'name' => $name,
+                'icon' => $definition['icon'],
+                'color' => $definition['color'],
+                'position' => $position++,
+            ]);
 
-            foreach ($children as $index => $childName) {
+            foreach ($definition['children'] as $index => $childName) {
                 Category::factory()->create([
                     'parent_id' => $parent->id,
                     'name' => $childName,
+                    'icon' => $definition['icon'],
+                    'color' => $definition['color'],
                     'position' => $index + 1,
                 ]);
             }

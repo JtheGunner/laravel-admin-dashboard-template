@@ -32,7 +32,7 @@ const columns: ColumnConfig[] = [
         label: 'Total',
         sortable: true,
         align: 'right',
-        unit: 'CHF',
+        unit: 'USD',
     },
     {
         key: 'status_label',
@@ -64,7 +64,7 @@ const fields = computed<FieldConfig[]>(() => [
         required: true,
         options: props.statusOptions,
     },
-    { name: 'total', label: 'Total (CHF)', type: 'number', required: true },
+    { name: 'total', label: 'Total (USD)', type: 'number', required: true },
     { name: 'placed_at', label: 'Placed at', type: 'datetime', colSpan: 2 },
     { name: 'notes', label: 'Notes', type: 'textarea', colSpan: 2 },
 ]);

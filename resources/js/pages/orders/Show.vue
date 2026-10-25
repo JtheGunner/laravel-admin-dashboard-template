@@ -62,7 +62,7 @@ const fields = computed<FieldConfig[]>(() => [
         options: props.statusOptions,
         colorField: 'status_color',
     },
-    { name: 'total', label: 'Total (CHF)', disabled: true },
+    { name: 'total', label: 'Total (USD)', disabled: true },
     { name: 'placed_at', label: 'Placed at', type: 'datetime', disabled: true },
     { name: 'notes', label: 'Notes', type: 'textarea', colSpan: 2 },
     {
@@ -103,7 +103,7 @@ function save(): void {
             @save="save"
         >
             <template #section_items-customBody>
-                <table class="w-full text-sm">
+                <table class="w-full text-sm [&_td]:px-2 [&_th]:px-2">
                     <thead class="text-left text-xs text-muted-foreground">
                         <tr>
                             <th class="py-2 font-medium">Product</th>

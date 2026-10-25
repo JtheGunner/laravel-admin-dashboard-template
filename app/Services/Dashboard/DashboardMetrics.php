@@ -36,7 +36,7 @@ class DashboardMetrics {
             'customers' => Customer::count(),
             'products' => Product::count(),
             'orders' => Order::count(),
-            'revenue' => number_format((float) Order::where('status', '!=', OrderStatus::Cancelled)->sum('total'), 2, '.', "'"),
+            'revenue' => number_format((float) Order::where('status', '!=', OrderStatus::Cancelled)->sum('total'), 2, '.', ','),
         ];
     }
 

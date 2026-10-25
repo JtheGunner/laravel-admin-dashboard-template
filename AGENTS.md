@@ -282,7 +282,7 @@ termination), so proxies are trusted (`trustProxies(at: '*')`) to detect HTTPS c
 
 Timestamps are stored in `app.timezone` (**UTC** — never change it, that would shift every stored
 value). What users see is rendered in `app.display_timezone` (`APP_DISPLAY_TIMEZONE`, default
-`Europe/Zurich`) and always reads `21 Aug 2026, 14:00`. Never call `->format('d.m.Y H:i')` on a
+`UTC`) and always reads `21 Aug 2026, 14:00`. Never call `->format('d.m.Y H:i')` on a
 model date: use `App\Support\DateTimeFormat` (`display`, `displayDate`, `toInput`, `fromInput` for
 `datetime-local` inputs). On the frontend `formatDateTime` / `formatDate` from `lib/resourceCell.ts`
 use the same timezone (shared Inertia prop `displayTimezone`, set at boot); `datetime` columns and

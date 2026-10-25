@@ -80,7 +80,7 @@ return [
     |
     */
 
-    'display_timezone' => env('APP_DISPLAY_TIMEZONE', 'Europe/Zurich'),
+    'display_timezone' => env('APP_DISPLAY_TIMEZONE', 'UTC'),
 
     /*
     |--------------------------------------------------------------------------

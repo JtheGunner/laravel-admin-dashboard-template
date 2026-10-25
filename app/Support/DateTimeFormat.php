@@ -12,7 +12,7 @@ use Illuminate\Support\Carbon;
  *
  * Timestamps stay in the database in the application timezone (`app.timezone`, UTC);
  * what a person sees is rendered in the display timezone (`app.display_timezone`,
- * `APP_DISPLAY_TIMEZONE`, default Europe/Zurich). Dates with a time read
+ * `APP_DISPLAY_TIMEZONE`, default UTC). Dates with a time read
  * `21 Aug 2026, 14:00`. The frontend counterpart is `DEFAULT_DATETIME_FORMAT` in
  * resources/js/lib/resourceCell.ts.
  */
