@@ -34,6 +34,17 @@ Most admin templates are a pile of static screens. This one is built around a **
 
 ---
 
+## 📸 Screenshots
+
+<table>
+  <tr>
+    <td align="center"><b>Light</b><br><img src="docs/screenshots/dashboard-light.png" alt="Dashboard in light mode"></td>
+    <td align="center"><b>Dark</b><br><img src="docs/screenshots/dashboard-dark.png" alt="Dashboard in dark mode"></td>
+  </tr>
+</table>
+
+---
+
 ## 🚀 Quick start
 
 Requirements: **PHP ≥ 8.4**, Composer, Node.js ≥ 22.
