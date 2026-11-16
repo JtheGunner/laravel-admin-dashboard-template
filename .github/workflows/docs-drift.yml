@@ -19,7 +19,7 @@ jobs:
           cache: false
       - name: Install doc-drift-checker
         run: |
-          GOBIN="$RUNNER_TEMP/bin" go install github.com/JtheGunner/doc-drift-checker/cmd/doc-drift-checker@v0.2.3
+          GOBIN="$RUNNER_TEMP/bin" go install github.com/JtheGunner/doc-drift-checker/cmd/doc-drift-checker@v0.3.0
       - name: Check documentation drift
         env:
           BASE_REF: ${{ github.base_ref }}
