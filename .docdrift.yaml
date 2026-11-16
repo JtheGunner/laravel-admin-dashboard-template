@@ -1,0 +1,43 @@
+# doc-drift-checker configuration. Reports README sections whose linked code
+# changed while the section itself did not. Sections are linked to code through
+# the file paths and relative links the docs mention.
+docs:
+  - "README.md"
+  - "docs/*.md"
+
+# A present `ignore` key replaces the built-in defaults, so they are repeated
+# here. Release notes, the license and contribution guidelines are
+# documentation, not code the README describes.
+ignore:
+  # tests
+  - "**/*_test.go"
+  - "**/*.test.*"
+  - "**/*.spec.*"
+  - "**/test/**"
+  - "**/tests/**"
+  - "**/__tests__/**"
+  - "**/testdata/**"
+  # generated code
+  - "**/*.pb.go"
+  - "**/*_gen.go"
+  - "**/*.generated.*"
+  - "**/generated/**"
+  - "**/*.min.js"
+  # lockfiles
+  - "**/go.sum"
+  - "**/package-lock.json"
+  - "**/yarn.lock"
+  - "**/pnpm-lock.yaml"
+  - "**/composer.lock"
+  - "**/Cargo.lock"
+  - "**/Gemfile.lock"
+  - "**/poetry.lock"
+  - "**/uv.lock"
+  # vendored code
+  - "**/vendor/**"
+  - "**/node_modules/**"
+  - "**/third_party/**"
+  # release notes, license, contribution guidelines
+  - "CHANGELOG.md"
+  - "LICENSE"
+  - "CONTRIBUTING.md"
